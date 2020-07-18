@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
 const { PythonShell } = require('python-shell');
 app.use(express.json());
 const API = 'https://financialmodelingprep.com/api/v3';
-const { KEY } = require('../key.json');
+const { KEY } = process.env.KEY || require('../key.json');
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
