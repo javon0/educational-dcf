@@ -19,7 +19,9 @@ app.get('/api/income', async function (req, res) {
   const ticker = req.query.ticker.toUpperCase();
   const data = (
     await axios.get(`${API}/income-statement/${ticker}?apikey=${KEY}`)
-  ).data;
+  ).data
+    .filter((cur, i) => i < 5)
+    .reverse();
   res.send(data);
 });
 
