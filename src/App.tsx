@@ -5,7 +5,6 @@ import IncomeStatement from './incomeStatement';
 import SearchTicker from './search';
 import { readTickers } from './store/index';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 interface AppProps {
   load: Function;

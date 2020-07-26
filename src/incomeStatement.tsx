@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { connect } from 'react-redux';
 
 const classes = makeStyles((theme) => ({
   table: {
@@ -16,7 +17,9 @@ const classes = makeStyles((theme) => ({
   },
 }));
 
-interface Props {}
+interface Props {
+  incomeS: Income[];
+}
 
 interface Income {
   date: string;
@@ -25,24 +28,17 @@ interface Income {
 
 const divide = 1000000;
 
-const IncomeStatement: React.FC<Props> = () => {
-  const [incomeS, setIncomeS] = useState<Income[]>([]);
+const IncomeStatement: React.FC<Props> = ({ incomeS }) => {
   const [growth1, setGrowth1] = useState<number>(0);
   const [growth2, setGrowth2] = useState<number>(0);
   const [growth3, setGrowth3] = useState<number>(0);
   const [growth4, setGrowth4] = useState<number>(0);
   const [growth5, setGrowth5] = useState<number>(0);
-  useEffect(() => {
-    async function fetchData() {
-      const result = (await axios.get('/api/income?ticker=aapl')).data;
-      setIncomeS(result);
-    }
-    fetchData();
-  }, []);
+
   const pyYearStart =
     incomeS[incomeS.length - 1] &&
     Number(incomeS[incomeS.length - 1].date.substring(0, 4)) + 1;
-  return (
+  return incomeS.length ? (
     <Table id="income">
       <TableHead>
         <TableRow>
@@ -118,7 +114,12 @@ const IncomeStatement: React.FC<Props> = () => {
         </TableRow>
       </TableBody>
     </Table>
+  ) : (
+    <div></div>
   );
 };
 
-export default IncomeStatement;
+const mapStateToProps = ({ incomeS }: any) => ({
+  incomeS,
+});
+export default connect(mapStateToProps)(IncomeStatement);
