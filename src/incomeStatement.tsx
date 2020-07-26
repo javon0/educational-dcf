@@ -24,6 +24,10 @@ interface Props {
 interface Income {
   date: string;
   operatingIncome: number;
+  revenue: number;
+  costOfRevenue: number;
+  grossProfit: number;
+  operatingExpenses: number;
 }
 
 const divide = 1000000;
@@ -103,6 +107,38 @@ const IncomeStatement: React.FC<Props> = ({ incomeS }) => {
               value={growth5}
             ></input>
           </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Revenue</TableCell>
+          {incomeS.map((cur) => (
+            <TableCell key={cur.date}>
+              {cur && formatMoney(cur.revenue / divide, '$', 0)}
+            </TableCell>
+          ))}
+        </TableRow>
+        <TableRow>
+          <TableCell>COGS</TableCell>
+          {incomeS.map((cur) => (
+            <TableCell key={cur.date}>
+              {cur && formatMoney(cur.costOfRevenue / divide, '$', 0)}
+            </TableCell>
+          ))}
+        </TableRow>
+        <TableRow>
+          <TableCell>Gross Margin</TableCell>
+          {incomeS.map((cur) => (
+            <TableCell key={cur.date}>
+              {cur && formatMoney(cur.grossProfit / divide, '$', 0)}
+            </TableCell>
+          ))}
+        </TableRow>
+        <TableRow>
+          <TableCell>Operating Expenses</TableCell>
+          {incomeS.map((cur) => (
+            <TableCell key={cur.date}>
+              {cur && formatMoney(cur.operatingExpenses / divide, '$', 0)}
+            </TableCell>
+          ))}
         </TableRow>
         <TableRow>
           <TableCell>EBIT</TableCell>
