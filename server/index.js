@@ -25,6 +25,10 @@ app.get('/api/income', async function (req, res) {
   res.send(data);
 });
 
+app.get('/api/getTickers', async function (req, res) {
+  const data = (await axios.get(`${API}/stock/list?apikey=${KEY}`)).data;
+  res.send(data);
+});
 app.get('/api/run', function (req, res) {
   const options = {
     mode: 'text',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import { formatMoney, toFixed } from 'accounting';
+import { formatMoney } from 'accounting';
 import {
   Table,
   TableBody,
@@ -34,9 +34,7 @@ const IncomeStatement: React.FC<Props> = () => {
   const [growth5, setGrowth5] = useState<number>(0);
   useEffect(() => {
     async function fetchData() {
-      const result = (
-        await axios.get('http://localhost:3000/api/income?ticker=aapl')
-      ).data;
+      const result = (await axios.get('/api/income?ticker=aapl')).data;
       setIncomeS(result);
     }
     fetchData();
