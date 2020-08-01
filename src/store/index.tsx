@@ -15,8 +15,19 @@ const _readTickers = (data: string[]) => ({
   type: READ_TICKERS,
   tickers: data,
 });
-export const readIncome = (ticker: string) => async (dispatch: Dispatch) => {
-  const data = (await axios.get(`/api/income?ticker=${ticker}`)).data;
+export const readIncome = (
+  ticker: string,
+  py1: number,
+  py2: number,
+  py3: number,
+  py4: number,
+  py5: number
+) => async (dispatch: Dispatch) => {
+  const data = (
+    await axios.get(
+      `/api/income?ticker=${ticker}&py1=${py1}&py2=${py2}&py3=${py3}&py4=${py4}&py5=${py5}`
+    )
+  ).data;
   dispatch(_readIncome(data));
 };
 

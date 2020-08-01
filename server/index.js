@@ -3,26 +3,16 @@ const axios = require('axios');
 const app = express();
 const path = require('path');
 const port = process.env.PORT || 8080;
-const { spawn } = require('child_process');
 const { PythonShell } = require('python-shell');
 app.use(express.json());
 const API = 'https://financialmodelingprep.com/api/v3';
 const KEY = process.env.KEY || require('../key.json').KEY;
+module.exports = app;
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
-
+app.use('/api', require('./api/income'));
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
-});
-
-app.get('/api/income', async function (req, res) {
-  const ticker = req.query.ticker.toUpperCase();
-  const data = (
-    await axios.get(`${API}/income-statement/${ticker}?apikey=${KEY}`)
-  ).data
-    .filter((cur, i) => i < 5)
-    .reverse();
-  res.send(data);
 });
 
 app.get('/api/getTickers', async function (req, res) {

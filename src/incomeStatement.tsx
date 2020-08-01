@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { readIncome } from './store/index';
 
 const classes = makeStyles((theme) => ({
   table: {
@@ -19,6 +20,7 @@ const classes = makeStyles((theme) => ({
 
 interface Props {
   incomeS: Income[];
+  loadTicker: Function;
 }
 
 interface Income {
@@ -28,20 +30,34 @@ interface Income {
   costOfRevenue: number;
   grossProfit: number;
   operatingExpenses: number;
+  symbol: string;
+  growth_rate: number;
 }
 
 const divide = 1000000;
 
-const IncomeStatement: React.FC<Props> = ({ incomeS }) => {
-  const [growth1, setGrowth1] = useState<number>(0);
-  const [growth2, setGrowth2] = useState<number>(0);
-  const [growth3, setGrowth3] = useState<number>(0);
-  const [growth4, setGrowth4] = useState<number>(0);
-  const [growth5, setGrowth5] = useState<number>(0);
+const IncomeStatement: React.FC<Props> = ({ incomeS, loadTicker }) => {
+  const [growth1, setGrowth1] = useState<number>(5);
+  const [growth2, setGrowth2] = useState<number>(5);
+  const [growth3, setGrowth3] = useState<number>(5);
+  const [growth4, setGrowth4] = useState<number>(5);
+  const [growth5, setGrowth5] = useState<number>(5);
+  const ticker = incomeS.length && incomeS[0].symbol;
 
-  const pyYearStart =
-    incomeS[incomeS.length - 1] &&
-    Number(incomeS[incomeS.length - 1].date.substring(0, 4)) + 1;
+  useEffect(() => {
+    if (incomeS.length) {
+      loadTicker(
+        ticker,
+        growth1 / 100,
+        growth2 / 100,
+        growth3 / 100,
+        growth4 / 100,
+        growth5 / 100
+      );
+    }
+  }, [growth1, growth2, growth3, growth4, growth5]);
+  incomeS.length && console.log(growth1, incomeS[5].growth_rate);
+
   return incomeS.length ? (
     <Table id="income">
       <TableHead>
@@ -52,11 +68,6 @@ const IncomeStatement: React.FC<Props> = ({ incomeS }) => {
               {cur && cur.date.substring(0, 4)}
             </TableCell>
           ))}
-          <TableCell>{pyYearStart}</TableCell>
-          <TableCell>{pyYearStart + 1}</TableCell>
-          <TableCell>{pyYearStart + 2}</TableCell>
-          <TableCell>{pyYearStart + 3}</TableCell>
-          <TableCell>{pyYearStart + 4}</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -158,4 +169,17 @@ const IncomeStatement: React.FC<Props> = ({ incomeS }) => {
 const mapStateToProps = ({ incomeS }: any) => ({
   incomeS,
 });
-export default connect(mapStateToProps)(IncomeStatement);
+
+const mapDispatchToProps = (dispatch: Function) => ({
+  loadTicker: (
+    ticker: string,
+    py1: number,
+    py2: number,
+    py3: number,
+    py4: number,
+    py5: number
+  ) => {
+    dispatch(readIncome(ticker, py1, py2, py3, py4, py5));
+  },
+});
+export default connect(mapStateToProps, mapDispatchToProps)(IncomeStatement);

@@ -52,7 +52,7 @@ const SearchTicker = ({ tickers, loadTicker }: SearchProps) => {
 
 const mapDispatchToProps = (dispatch: Function) => ({
   loadTicker: (ticker: string) => {
-    dispatch(readIncome(ticker));
+    dispatch(readIncome(ticker, 0.05, 0.05, 0.05, 0.05, 0.05));
   },
 });
 
