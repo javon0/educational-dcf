@@ -13,12 +13,13 @@ interface ResultType {
   description: string;
   price: string;
 }
-// const resultRender = (results: string[]) => {
-//     return (
-//        results.map()
-//     )
-
-// };
+const initialDa = {
+  da1: 5,
+  da2: 5,
+  da3: 5,
+  da4: 5,
+  da5: 5,
+};
 
 const SearchTicker = ({ tickers, loadTicker }: SearchProps) => {
   const [ticker, setTicker] = useState<string>('');
@@ -52,7 +53,7 @@ const SearchTicker = ({ tickers, loadTicker }: SearchProps) => {
 
 const mapDispatchToProps = (dispatch: Function) => ({
   loadTicker: (ticker: string) => {
-    dispatch(readIncome(ticker, 0.05, 0.05, 0.05, 0.05, 0.05));
+    dispatch(readIncome(ticker, 0.05, 0.05, 0.05, 0.05, 0.05, initialDa));
   },
 });
 

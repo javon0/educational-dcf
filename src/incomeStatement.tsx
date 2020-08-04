@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import { formatMoney } from 'accounting';
 import {
@@ -32,8 +31,24 @@ interface Income {
   operatingExpenses: number;
   symbol: string;
   growth_rate: number;
+  depreciationAndAmortization: number;
 }
 
+interface DA {
+  da1: number;
+  da2: number;
+  da3: number;
+  da4: number;
+  da5: number;
+}
+
+const initialDa = {
+  da1: 5,
+  da2: 5,
+  da3: 5,
+  da4: 5,
+  da5: 5,
+};
 const divide = 1000000;
 
 const IncomeStatement: React.FC<Props> = ({ incomeS, loadTicker }) => {
@@ -42,6 +57,8 @@ const IncomeStatement: React.FC<Props> = ({ incomeS, loadTicker }) => {
   const [growth3, setGrowth3] = useState<number>(5);
   const [growth4, setGrowth4] = useState<number>(5);
   const [growth5, setGrowth5] = useState<number>(5);
+  const [da, setDa] = useState<DA>(initialDa);
+  console.log(da);
   const ticker = incomeS.length && incomeS[0].symbol;
 
   useEffect(() => {
@@ -52,10 +69,11 @@ const IncomeStatement: React.FC<Props> = ({ incomeS, loadTicker }) => {
         growth2 / 100,
         growth3 / 100,
         growth4 / 100,
-        growth5 / 100
+        growth5 / 100,
+        da
       );
     }
-  }, [growth1, growth2, growth3, growth4, growth5]);
+  }, [growth1, growth2, growth3, growth4, growth5, da]);
   incomeS.length && console.log(growth1, incomeS[5].growth_rate);
 
   return incomeS.length ? (
@@ -144,6 +162,63 @@ const IncomeStatement: React.FC<Props> = ({ incomeS, loadTicker }) => {
           ))}
         </TableRow>
         <TableRow>
+          <TableCell>Dep and AM %</TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell>
+            <input
+              id="year1Da"
+              onChange={(ev) => setDa({ ...da, da1: Number(ev.target.value) })}
+              type="number"
+              value={da.da1}
+            ></input>
+          </TableCell>
+          <TableCell>
+            <input
+              id="yearDa"
+              onChange={(ev) => setDa({ ...da, da2: Number(ev.target.value) })}
+              type="number"
+              value={da.da2}
+            ></input>
+          </TableCell>
+          <TableCell>
+            <input
+              id="year3Da"
+              onChange={(ev) => setDa({ ...da, da3: Number(ev.target.value) })}
+              type="number"
+              value={da.da3}
+            ></input>
+          </TableCell>
+          <TableCell>
+            <input
+              id="year4Da"
+              onChange={(ev) => setDa({ ...da, da4: Number(ev.target.value) })}
+              type="number"
+              value={da.da4}
+            ></input>
+          </TableCell>
+          <TableCell>
+            <input
+              id="year5Da"
+              onChange={(ev) => setDa({ ...da, da5: Number(ev.target.value) })}
+              type="number"
+              value={da.da5}
+            ></input>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Dep and Am</TableCell>
+          {incomeS.map((cur) => (
+            <TableCell key={cur.date}>
+              {cur &&
+                formatMoney(cur.depreciationAndAmortization / divide, '$', 0)}
+            </TableCell>
+          ))}
+        </TableRow>
+        <TableRow>
           <TableCell>Operating Expenses</TableCell>
           {incomeS.map((cur) => (
             <TableCell key={cur.date}>
@@ -177,9 +252,10 @@ const mapDispatchToProps = (dispatch: Function) => ({
     py2: number,
     py3: number,
     py4: number,
-    py5: number
+    py5: number,
+    da: DA
   ) => {
-    dispatch(readIncome(ticker, py1, py2, py3, py4, py5));
+    dispatch(readIncome(ticker, py1, py2, py3, py4, py5, da));
   },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(IncomeStatement);
